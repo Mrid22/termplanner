@@ -6,8 +6,12 @@ use ratatui::{
     widgets::{Block, BorderType, Clear, Paragraph},
 };
 
+mod dates;
+mod notes;
 mod tasks;
 
+use dates::render_dates;
+use notes::render_notes;
 use tasks::render_tasks;
 use tasks::{TaskState, ToDoItem};
 
@@ -133,7 +137,9 @@ fn render(frame: &mut Frame, app_state: &mut TaskState) {
     .margin(1)
     .split(frame.area());
 
+    render_dates(frame, app_state, border_area[0]);
     render_tasks(frame, app_state, border_area[1]);
+    render_notes(frame, app_state, border_area[2]);
 }
 
 pub fn render_popup(frame: &mut Frame, app_state: &mut TaskState, title: String) {
