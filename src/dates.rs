@@ -13,17 +13,18 @@ pub fn render_dates(frame: &mut Frame, app_state: &mut DateState, area: Rect, is
         .margin(1)
         .areas(area);
 
-    let border_color = if is_focused { Color::White } else { Color::Blue };
+    let border_color = if is_focused { Color::Yellow } else { Color::Blue };
 
     Block::bordered()
         .border_type(BorderType::Rounded)
-        .fg(border_color)
+        .border_style(Style::default().fg(border_color))
         .title("Dates")
         .render(area, frame.buffer_mut());
 
     let list = List::new(app_state.items.iter().map(|date| {
         ListItem::from(date.date.as_str())
     }))
+    .style(Style::default().fg(Color::Blue))
     .highlight_symbol("> ")
     .highlight_style(Style::default().fg(Color::Yellow));
 

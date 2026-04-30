@@ -29,7 +29,7 @@ The currently focused pane SHALL be visually distinguished from inactive panes.
 
 #### Scenario: Focused pane is highlighted
 - **WHEN** a pane has focus
-- **THEN** its border SHALL be rendered in a distinct color (e.g., bright/white) compared to inactive panes (e.g., blue/dim)
+- **THEN** its border SHALL be rendered in `Color::Yellow` compared to inactive panes which use `Color::Blue`
 
 ### Requirement: Input scoped to active pane
 

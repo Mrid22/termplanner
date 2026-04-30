@@ -13,17 +13,18 @@ pub fn render_notes(frame: &mut Frame, app_state: &mut NoteState, area: Rect, is
         .margin(1)
         .areas(area);
 
-    let border_color = if is_focused { Color::White } else { Color::Blue };
+    let border_color = if is_focused { Color::Yellow } else { Color::Blue };
 
     Block::bordered()
         .border_type(BorderType::Rounded)
-        .fg(border_color)
+        .border_style(Style::default().fg(border_color))
         .title("Notes")
         .render(area, frame.buffer_mut());
 
     let list = List::new(app_state.items.iter().map(|note| {
         ListItem::from(note.title.as_str())
     }))
+    .style(Style::default().fg(Color::Blue))
     .highlight_symbol("> ")
     .highlight_style(Style::default().fg(Color::Yellow));
 
