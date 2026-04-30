@@ -20,6 +20,7 @@
         clippy
         rust-analyzer
         glib
+        pnpm
       ];
 
       nativeBuildInputs = with pkgs; [

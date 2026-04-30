@@ -1,54 +1,38 @@
-use ratatui::widgets::ListState;
-
-use crate::render_popup;
-
 use ratatui::{
     Frame,
     layout::{Constraint, Layout, Rect},
-    style::{Color, Style, Stylize},
-    text::ToSpan,
+    style::{Color, Modifier, Style, Stylize},
     widgets::{Block, BorderType, List, ListItem, Widget},
 };
 
-#[derive(Debug, Default)]
-pub struct ToDoItem {
-    pub is_done: bool,
-    pub description: String,
-}
+use crate::types::TaskState;
 
-#[derive(Debug, Default)]
-pub struct TaskState {
-    pub items: Vec<ToDoItem>,
-    pub list_state: ListState,
-    pub is_adding: bool,
-    pub task_input_val: String,
-}
-
-pub fn render_tasks(frame: &mut Frame, app_state: &mut TaskState, area: Rect) {
+pub fn render_tasks(frame: &mut Frame, app_state: &mut TaskState, area: Rect, is_focused: bool) {
     let [inner_area] = Layout::vertical([Constraint::Fill(1)])
         .margin(1)
         .areas(area);
 
+    let border_color = if is_focused { Color::White } else { Color::Blue };
+
     Block::bordered()
         .border_type(BorderType::Rounded)
-        .fg(Color::Blue)
+        .fg(border_color)
         .title("Tasks")
         .render(area, frame.buffer_mut());
+
     let list = List::new(app_state.items.iter().map(|task| {
-        let value = if task.is_done {
-            task.description.to_span().crossed_out().dim()
+        let span = if task.done {
+            task.description
+                .clone()
+                .dim()
+                .add_modifier(Modifier::CROSSED_OUT)
         } else {
-            task.description.to_span()
+            task.description.clone().into()
         };
-        ListItem::from(task.description.as_str());
-        ListItem::from(value)
+        ListItem::from(span)
     }))
     .highlight_symbol("> ")
     .highlight_style(Style::default().fg(Color::Yellow));
 
     frame.render_stateful_widget(list, inner_area, &mut app_state.list_state);
-
-    if app_state.is_adding {
-        render_popup(frame, app_state, String::from("Add a task"));
-    }
 }
